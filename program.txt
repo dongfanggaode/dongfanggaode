@@ -1,0 +1,232 @@
+（1）大数乘法
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char a[100],b[100];
+	int a1[100],b1[100],c1[200]; 
+	int e,f,g,h,i,j,flag;
+	while(gets(a)!=NULL)
+	{
+		g=0;
+		gets(b);
+		memset(a1,0,sizeof(a1));
+		memset(b1,0,sizeof(b1));
+		memset(c1,0,sizeof(c1));
+		e=strlen(a);
+		f=strlen(b);
+		for(i=0;i<e;i++)
+			a1[i]=a[e-1-i]-'0';
+		for(i=0;i<f;i++)
+			b1[i]=b[f-1-i]-'0';
+		for(i=0;i<e;i++)
+                                      for(j=0;j<f;j++)
+			{
+			     c1[i+j]+=a1[i]*b1[j];
+			}
+		for(i=0;i<e+f;i++)
+		{
+			h=(c1[i]+g);
+			c1[i]=h%10;
+			g=h/10;
+		}
+		flag=0;
+		for(i=e+f-1;i>=0;i--)
+		{
+			if(c1[i]==0)
+			{
+				if(flag==0)
+					continue;
+				else
+				{
+					printf("%d",c1[i]);
+				}
+			}
+			else
+			{
+				flag=1;
+			    printf("%d",c1[i]);
+			}
+		}
+		printf("\n");
+	}
+	getchar();
+	getchar();
+	return 0;
+}
+（2）时区间时间转换
+#include<stdio.h>
+#include<string.h>
+char time1[32][5]={"UTC","GMT","BST","IST","WET","WEST","CET","CEST","EET","EEST","MSK","MSD","AST ","ADT","NST","NDT",
+      "EST","EDT","CST","CDT","MST","MDT","PST","PDT","HST","AKST","AKDT","AEST","AEDT","ACST","ACDT","AWST"};
+float time2[32]={0,0,1,1,0,1,1,2,2,3,3,4,-4,-3,-3.5,-2.5,-5,-4,-6,-5,-7,-6,-8,-7,-10,-9,-8,10,11,9.5,10.5,8};
+int main()
+{
+	int JN,n,i,j,k,hour,minute;
+	int nstr;
+	float ctime;
+	char str[50],a1[20],a2[20],b1[20],b2[20],a[30];
+	scanf("%d",&n);
+	getchar();
+	for(i=0;i<n;i++)
+	{
+		int x1=1,x2=2,x3=3,x4=4;
+		gets(str);
+		nstr=strlen(str);
+		if(str[0]=='n'||str[0]=='m')
+		{
+			x2=11;
+		}
+		int m=0;
+		for(j=0;j<=nstr;j++)
+		{
+			if(str[j]=='\0')
+			{
+		                       if(m>0)
+			      {
+				      a[m]='\0';
+			                      strcpy(b2,a);
+				  }
+				  x4=8;
+				  m=0;
+				  break;
+			}
+			if(str[j]==' ')
+			{
+                                                    if(x1==1)
+			    {
+				   if(m>0)
+			       { 
+				      a[m]='\0';
+					  strcpy(a1,a);
+				   }
+				   x1=5;
+				   m=0;
+			    }
+			    else if(x2==2)
+			    {
+				   if(m>0)
+			       {
+				      a[m]='\0';
+					  strcpy(a2,a);
+				    }
+				    x2=6;
+				    m=0;
+			    }
+			    else if(x3==3)
+			   {
+				   if(m>0)
+			                 {
+				        a[m]='\0';
+			                        strcpy(b1,a);
+				  }
+				  x3=7;
+				  m=0;
+			   }
+		  }
+		  else 
+		  {
+			  a[m++]=str[j];
+		   }
+		}
+		for(j=0;j<32;j++)
+		{
+			if(strcmp(b1,time1[j])==0)
+				break;
+		}
+		for(k=0;k<32;k++)
+		{
+			if(strcmp(b2,time1[k])==0)
+				break;
+		}
+		ctime=time2[k]-time2[j];
+		if(strcmp(a1,"noon")==0)
+		{
+			hour=12;
+			minute=0;
+		}
+		else if(strcmp(a1,"midnight")==0)
+		{
+			hour=24;
+			minute=0;
+		}
+		else if(a1[0]!='n'&&a1[0]!='m')
+		{
+			int f1=0;
+			hour=0;
+			minute=0;
+			int JN=strlen(a1);
+			for(j=0;j<JN;j++)
+			{
+				if(a1[j]!=':')
+				{
+				   if((f1==0)&&(a1[j]<='9'&&a1[j]>='0'))
+				   {
+					    hour=hour*10+a1[j]-'0';
+				   }
+				}
+				else 
+				{f1=2;}
+				if((f1==2)&&(a1[j]<='9'&&a1[j]>='0'))
+				{
+					minute=minute*10+a1[j]-'0';
+				}
+			}
+			if((strcmp(a2,"a.m.")==0)&&(hour==12))
+				hour+=12;
+			else if((strcmp(a2,"p.m.")==0)&&hour<12)
+				hour+=12;
+		}
+		int c=ctime;
+		float n=ctime-c;
+	                hour+=c;
+		minute+=n*60;
+		if(minute<0)
+		{
+			minute+=60;
+			hour=hour-1;
+		}
+		if(hour<1)
+		{
+			hour=hour+24;
+		}
+		else if(hour>24)
+		{
+			hour=hour-24;
+		}
+		if(hour==12&&minute==0)
+		{
+			printf("noon\n");
+		}
+		else if(hour==24&&minute==0)
+		{
+	                      printf("midnight\n");
+		}
+                               if(hour>=1&&hour<=11)
+		{
+			printf("%d:%d a.m.\n",hour,minute);
+		}
+                               if(hour>12&&hour<24)
+		{
+			int H=hour-12;
+			printf("%d:%d p.m.\n",H,minute);
+		}
+		if(hour==24&&minute>0)
+		{
+			int H1=hour-12;
+			printf("%d:%d a.m.\n",H1,minute);
+		}
+		if(hour==12&&minute>0)
+		{
+			 printf("%d:%d p.m.\n",hour,minute);
+		}
+		memset(str,0,sizeof(str));
+		memset(a1,0,sizeof(a1));
+		memset(a2,0,sizeof(a2));
+		memset(b1,0,sizeof(b1));
+		memset(b2,0,sizeof(b2));
+	}
+	getchar();
+	getchar();
+	return 0;
+}
